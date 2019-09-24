@@ -1,0 +1,50 @@
+<launch>
+
+<!--
+  <param name="ticks_meter" value="14865" />
+  <param name="encoder_min" value="-2147483648" />
+  <param name="encoder_max" value="2147483648" />
+-->
+
+  <arg name="model" default="robot1.urdf" />
+  <arg name="gui" default="False" />
+
+  <!-- set these parameters on Parameter Server -->
+  <param name="robot_description" textfile="$(find rospibot5)/urdf/$(arg model)" />
+  <param name="use_gui" value="$(arg gui)"/>
+
+  <!-- Start 2 nodes: joint_state_publisher, robot_state_publisher -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+  <include file="$(find rospibot5)/launch/diff_pid.launch"/>
+  <include file="$(find rospibot5)/launch/diff_tf.launch"/>
+  <include file="$(find rospibot5)/launch/diff_twist.launch"/>
+<!--
+  <node name="xv11" pkg="xv_11_laser_driver" type="neato_laser_publisher" respawn="true" output="screen">
+    <param name="port" value="/dev/ttyS1"/>-->
+    <!--<param name="firmware_version" value="2"/>-->
+<!--  </node>
+  <node name="mpu6050" pkg="mpu6050" type="mpu6050_node" output="screen" />
+
+   <node name="mpu6050_node" pkg="ros_mpu6050_node" type="mpu6050_node" output="screen">-->
+      <!--<rosparam file="$(find mypackage)/config/example.yaml" command="load" />-->
+<!--      <param name="frequency" type="int" value="10" />
+      <param name="frame_id" type="str" value="base_imu" />
+      <param name="ax" type="int" value="0" />
+      <param name="ay" type="int" value="0" />
+      <param name="az" type="int" value="0" />
+      <param name="gx" type="int" value="0" />
+      <param name="gy" type="int" value="0" />
+      <param name="gz" type="int" value="0" />
+      <param name="ado" type="bool" value="false" />
+      <param name="debug" type="bool" value="false" />
+   </node>
+-->
+  <node name="diff_base" pkg="rospibot5" type="stm32_base1_node" output="screen">
+    <remap from="wheel_left" to="lwheel"/>
+    <remap from="wheel_right" to="rwheel"/>
+    <rosparam param="rate">50.0</rosparam>
+  </node>
+
+</launch>

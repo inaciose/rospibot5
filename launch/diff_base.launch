@@ -1,0 +1,19 @@
+<launch>
+
+<!--
+  <param name="ticks_meter" value="14865" />
+  <param name="encoder_min" value="-2147483648" />
+  <param name="encoder_max" value="2147483648" />
+-->
+
+  <include file="$(find rospibot5)/launch/diff_pid.launch"/>
+  <include file="$(find rospibot5)/launch/diff_tf.launch"/>
+  <include file="$(find rospibot5)/launch/diff_twist.launch"/>
+
+  <node name="diff_base" pkg="rospibot5" type="stm32_base1_node" output="screen">
+    <remap from="wheel_left" to="lwheel"/>
+    <remap from="wheel_right" to="rwheel"/>
+    <rosparam param="rate">50.0</rosparam>
+  </node>
+
+</launch>
